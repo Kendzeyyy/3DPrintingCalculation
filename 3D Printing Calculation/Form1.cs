@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClosedXML.Excel;
@@ -33,27 +29,54 @@ namespace _3D_Printing_Calculation
 {
     public partial class Form1 : Form
     {
+        private Settings formSettings;
+
         public Form1()
         {
             InitializeComponent();
-            getElectricityPeakAPI();
+            GetElectricityPeakAPI();
+            
+
+            formSettings = new Settings();
         }
 
+        // Private
         private decimal price, filamentUsed, timeUsed;
         private double convertedPrice, totalSum, profitTotal, countWorkAndProfitMargin;
-        private const int decimalPlaces = 2, profitMargin = 30, workEffort = 20, startingPrice = 2, postProcessing = 2;
+        private int profitMargin = 30, workEffort = 20, startingPrice = 2, postProcessing = 2;
+        private const int decimalPlaces = 2;
         private const string spotURL = "https://api.epossu.fi/v2/marketData";
 
+        // Date time
         DateTime date = DateTime.Today;
 
         // Get the current time
         DateTime now = DateTime.Now;
 
+        private void Main()
+        {
+            if (CheckEmptyFields())
+            {
+                return;
+            }
+
+            price = filamentPriceNumber.Value;
+            filamentUsed = filamentUsedNumber.Value;
+            timeUsed = printingTimeNumber.Value;
+
+            CalculatePrintingSum(price);
+            totalSum = CalculateFilamentUsed() + ElectricityUsed();
+
+            double roundedValue = Math.Round(totalSum, decimalPlaces);
+            GetSettingsValues();
+            PrintingTotalSum(roundedValue);
+        }
+
         #region Buttons
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            var newForm = new Settings();
-            newForm.Show();
+            Settings settingsForm = new Settings();
+            settingsForm.ShowDialog();
         }
 
         private void btnCalculate_Click(object sender, EventArgs e)
@@ -64,6 +87,23 @@ namespace _3D_Printing_Calculation
         private void btnExportExcel_Click(object sender, EventArgs e)
         {
             ExportToExcel();
+        }
+        #endregion
+
+        #region Settings values
+        public void GetSettingsValues()
+        {
+            try
+            {
+                profitMargin = (int)Properties.Settings.Default.ProfitMargin;
+                workEffort = (int)Properties.Settings.Default.WorkEffort;
+                startingPrice = (int)Properties.Settings.Default.StartingPrice;
+                postProcessing = (int)Properties.Settings.Default.PostProcessing;
+            } 
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
         }
         #endregion
 
@@ -119,7 +159,7 @@ namespace _3D_Printing_Calculation
         #endregion
 
         #region Electricity API
-        private async Task getElectricityPeakAPI()
+        private async Task GetElectricityPeakAPI()
         {
             try
             {
@@ -137,10 +177,6 @@ namespace _3D_Printing_Calculation
 
                         // Deserialize JSON string to ApiResponse object
                         ApiResponseDTO.ApiResponse apiResponse = JsonConvert.DeserializeObject<ApiResponseDTO.ApiResponse>(responseBody);
-                        ApiResponseDTO.Data apiData = JsonConvert.DeserializeObject<ApiResponseDTO.Data>(responseBody);
-                        ApiResponseDTO.ElectricityData apiElectricity = JsonConvert.DeserializeObject<ApiResponseDTO.ElectricityData>(responseBody);
-                        ApiResponseDTO.PriceInfo apiPriceInfo = JsonConvert.DeserializeObject<ApiResponseDTO.PriceInfo>(responseBody);
-                        ApiResponseDTO.Options apiOptions = JsonConvert.DeserializeObject<ApiResponseDTO.Options>(responseBody);
 
                         if (apiResponse != null && apiResponse.Data != null)
                         {
@@ -156,7 +192,7 @@ namespace _3D_Printing_Calculation
                                 .OrderBy(p => Math.Abs((DateTime.ParseExact(p.Date, "dd.MM.yyyy HH:mm", null) - now).TotalMinutes))
                                 .FirstOrDefault();
 
-                            lblElectricityPriceNow.Text += currentPrice.Price;
+                            lblElectricityPriceNow.Text += Math.Round(currentPrice.Price, decimalPlaces);
                             lblElectricityPriceLowest.Text += Math.Round(apiResponse.Data.Today.Options.Lowest.Price, decimalPlaces);
                             lblElectricityPriceHighest.Text += Math.Round(apiResponse.Data.Today.Options.Highest.Price, decimalPlaces);
 
@@ -171,7 +207,7 @@ namespace _3D_Printing_Calculation
                             {
                                 // Access the "options" values for tomorrow
                                 double tomorrowAverage = apiResponse.Data.Tomorrow.Options.Average;
-                                lblElectricityPriceTomorrow.Text += tomorrowAverage;
+                                lblElectricityPriceTomorrow.Text += Math.Round(tomorrowAverage, decimalPlaces);
                                 lblElectricityTomorrowPriceLowest.Text += Math.Round(apiResponse.Data.Tomorrow.Options.Lowest.Price, decimalPlaces);
                                 lblElectricityTomorrowPriceHighest.Text += Math.Round(apiResponse.Data.Tomorrow.Options.Highest.Price, decimalPlaces);
                             }
@@ -195,7 +231,7 @@ namespace _3D_Printing_Calculation
         #endregion
 
         #region Electricity consumption
-        private double electricityUsed()
+        private double ElectricityUsed()
         {
             int power = 700;
             double electricityPrice = (double)(electricityPriceNumber.Value / 100);
@@ -206,26 +242,8 @@ namespace _3D_Printing_Calculation
         }
         #endregion
 
-        private void Main()
-        {
-            if (checkEmptyFields())
-            {
-                return;
-            }
-
-            price = filamentPriceNumber.Value;
-            filamentUsed = filamentUsedNumber.Value;
-            timeUsed = printingTimeNumber.Value;
-
-            calculatePrintingSum(price);
-            totalSum = calculateFilamentUsed() + electricityUsed();
-
-            double roundedValue = Math.Round(totalSum, decimalPlaces);
-            printingTotalSum(roundedValue);
-        }
-
         #region Error messages
-        private bool checkEmptyFields()
+        private bool CheckEmptyFields()
         {
             if (filamentPriceNumber.Value == filamentPriceNumber.Minimum)
                 ShowErrorMessage("Filament price");
@@ -250,13 +268,13 @@ namespace _3D_Printing_Calculation
         #endregion
 
         #region Filament price
-        private void calculatePrintingSum(decimal price)
+        private void CalculatePrintingSum(decimal price)
         {
             // Filament price (e.g. 30€ / 1000g = 0,03)
             convertedPrice = (double)(price / 1000);
         }
 
-        private double calculateFilamentUsed()
+        private double CalculateFilamentUsed()
         {
             // Calculated printing sum x filament used (e.g. 0,03 x 80g = 2.4€)
             return convertedPrice * (double)filamentUsed;
@@ -264,7 +282,7 @@ namespace _3D_Printing_Calculation
         #endregion
 
         #region Printing price calculation
-        private void printingTotalSum(double roundedValue)
+        private void PrintingTotalSum(double roundedValue)
         {
             countWorkAndProfitMargin = roundedValue / 100 * (profitMargin + workEffort);
             profitTotal = roundedValue + countWorkAndProfitMargin + startingPrice + postProcessing;

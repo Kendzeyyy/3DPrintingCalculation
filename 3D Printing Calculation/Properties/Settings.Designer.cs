@@ -25,5 +25,10 @@ namespace _3D_Printing_Calculation.Properties
                 return defaultInstance;
             }
         }
+
+        public decimal ProfitMargin { get; internal set; }
+        public decimal WorkEffort { get; internal set; }
+        public decimal StartingPrice { get; internal set; }
+        public decimal PostProcessing { get; internal set; }
     }
 }

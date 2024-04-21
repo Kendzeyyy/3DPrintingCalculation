@@ -34,17 +34,14 @@ namespace _3D_Printing_Calculation
             this.lblFilamentPrice = new System.Windows.Forms.Label();
             this.lblUsedFilaments = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnCalculate = new System.Windows.Forms.Button();
             this.lblTotalCount = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.filamentPriceNumber = new System.Windows.Forms.NumericUpDown();
             this.filamentUsedNumber = new System.Windows.Forms.NumericUpDown();
             this.electricityPriceNumber = new System.Windows.Forms.NumericUpDown();
             this.printingTimeNumber = new System.Windows.Forms.NumericUpDown();
-            this.btnExportExcel = new System.Windows.Forms.Button();
             this.lblFilamentType = new System.Windows.Forms.Label();
             this.comboBoxFilamentType = new System.Windows.Forms.ComboBox();
-            this.btnSettings = new System.Windows.Forms.Button();
             this.lblElectricityPriceNow = new System.Windows.Forms.Label();
             this.lblElectricityPriceLowest = new System.Windows.Forms.Label();
             this.lblElectricityPriceHighest = new System.Windows.Forms.Label();
@@ -53,6 +50,9 @@ namespace _3D_Printing_Calculation
             this.label4 = new System.Windows.Forms.Label();
             this.lblElectricityTomorrowPriceHighest = new System.Windows.Forms.Label();
             this.lblElectricityTomorrowPriceLowest = new System.Windows.Forms.Label();
+            this.btnSettings = new System.Windows.Forms.Button();
+            this.btnExportExcel = new System.Windows.Forms.Button();
+            this.btnCalculate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.filamentPriceNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filamentUsedNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.electricityPriceNumber)).BeginInit();
@@ -93,23 +93,11 @@ namespace _3D_Printing_Calculation
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(27, 534);
+            this.label1.Location = new System.Drawing.Point(32, 534);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(293, 25);
             this.label1.TabIndex = 5;
             this.label1.Text = "Time used for printing (e.g. 4.5h)";
-            // 
-            // btnCalculate
-            // 
-            this.btnCalculate.BackColor = System.Drawing.Color.GreenYellow;
-            this.btnCalculate.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCalculate.Location = new System.Drawing.Point(907, 794);
-            this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(297, 91);
-            this.btnCalculate.TabIndex = 7;
-            this.btnCalculate.Text = "Calculate";
-            this.btnCalculate.UseVisualStyleBackColor = false;
-            this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
             // 
             // lblTotalCount
             // 
@@ -125,7 +113,7 @@ namespace _3D_Printing_Calculation
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(32, 438);
+            this.label2.Location = new System.Drawing.Point(32, 440);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(347, 25);
             this.label2.TabIndex = 9;
@@ -196,18 +184,6 @@ namespace _3D_Printing_Calculation
             this.printingTimeNumber.Size = new System.Drawing.Size(196, 35);
             this.printingTimeNumber.TabIndex = 14;
             // 
-            // btnExportExcel
-            // 
-            this.btnExportExcel.BackColor = System.Drawing.Color.Green;
-            this.btnExportExcel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExportExcel.Location = new System.Drawing.Point(907, 697);
-            this.btnExportExcel.Name = "btnExportExcel";
-            this.btnExportExcel.Size = new System.Drawing.Size(297, 91);
-            this.btnExportExcel.TabIndex = 15;
-            this.btnExportExcel.Text = "Export Excel";
-            this.btnExportExcel.UseVisualStyleBackColor = false;
-            this.btnExportExcel.Click += new System.EventHandler(this.btnExportExcel_Click);
-            // 
             // lblFilamentType
             // 
             this.lblFilamentType.AutoSize = true;
@@ -237,21 +213,11 @@ namespace _3D_Printing_Calculation
             this.comboBoxFilamentType.Text = "PLA";
             this.comboBoxFilamentType.SelectedIndexChanged += new System.EventHandler(this.comboBoxFilamentType_SelectedIndexChanged);
             // 
-            // btnSettings
-            // 
-            this.btnSettings.Location = new System.Drawing.Point(1101, 29);
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(103, 97);
-            this.btnSettings.TabIndex = 19;
-            this.btnSettings.Text = "Settings";
-            this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
-            // 
             // lblElectricityPriceNow
             // 
             this.lblElectricityPriceNow.AutoSize = true;
             this.lblElectricityPriceNow.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblElectricityPriceNow.Location = new System.Drawing.Point(500, 204);
+            this.lblElectricityPriceNow.Location = new System.Drawing.Point(528, 243);
             this.lblElectricityPriceNow.Name = "lblElectricityPriceNow";
             this.lblElectricityPriceNow.Size = new System.Drawing.Size(92, 36);
             this.lblElectricityPriceNow.TabIndex = 20;
@@ -261,7 +227,7 @@ namespace _3D_Printing_Calculation
             // 
             this.lblElectricityPriceLowest.AutoSize = true;
             this.lblElectricityPriceLowest.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblElectricityPriceLowest.Location = new System.Drawing.Point(500, 247);
+            this.lblElectricityPriceLowest.Location = new System.Drawing.Point(528, 286);
             this.lblElectricityPriceLowest.Name = "lblElectricityPriceLowest";
             this.lblElectricityPriceLowest.Size = new System.Drawing.Size(126, 36);
             this.lblElectricityPriceLowest.TabIndex = 21;
@@ -271,7 +237,7 @@ namespace _3D_Printing_Calculation
             // 
             this.lblElectricityPriceHighest.AutoSize = true;
             this.lblElectricityPriceHighest.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblElectricityPriceHighest.Location = new System.Drawing.Point(500, 295);
+            this.lblElectricityPriceHighest.Location = new System.Drawing.Point(528, 334);
             this.lblElectricityPriceHighest.Name = "lblElectricityPriceHighest";
             this.lblElectricityPriceHighest.Size = new System.Drawing.Size(132, 36);
             this.lblElectricityPriceHighest.TabIndex = 22;
@@ -281,7 +247,7 @@ namespace _3D_Printing_Calculation
             // 
             this.lblElectricityPriceTomorrow.AutoSize = true;
             this.lblElectricityPriceTomorrow.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblElectricityPriceTomorrow.Location = new System.Drawing.Point(500, 407);
+            this.lblElectricityPriceTomorrow.Location = new System.Drawing.Point(528, 446);
             this.lblElectricityPriceTomorrow.Name = "lblElectricityPriceTomorrow";
             this.lblElectricityPriceTomorrow.Size = new System.Drawing.Size(142, 36);
             this.lblElectricityPriceTomorrow.TabIndex = 23;
@@ -291,7 +257,7 @@ namespace _3D_Printing_Calculation
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(500, 165);
+            this.label3.Location = new System.Drawing.Point(528, 204);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(434, 36);
             this.label3.TabIndex = 24;
@@ -301,7 +267,7 @@ namespace _3D_Printing_Calculation
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(500, 369);
+            this.label4.Location = new System.Drawing.Point(528, 408);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(485, 36);
             this.label4.TabIndex = 25;
@@ -311,7 +277,7 @@ namespace _3D_Printing_Calculation
             // 
             this.lblElectricityTomorrowPriceHighest.AutoSize = true;
             this.lblElectricityTomorrowPriceHighest.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblElectricityTomorrowPriceHighest.Location = new System.Drawing.Point(500, 497);
+            this.lblElectricityTomorrowPriceHighest.Location = new System.Drawing.Point(528, 536);
             this.lblElectricityTomorrowPriceHighest.Name = "lblElectricityTomorrowPriceHighest";
             this.lblElectricityTomorrowPriceHighest.Size = new System.Drawing.Size(132, 36);
             this.lblElectricityTomorrowPriceHighest.TabIndex = 27;
@@ -321,11 +287,56 @@ namespace _3D_Printing_Calculation
             // 
             this.lblElectricityTomorrowPriceLowest.AutoSize = true;
             this.lblElectricityTomorrowPriceLowest.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblElectricityTomorrowPriceLowest.Location = new System.Drawing.Point(500, 452);
+            this.lblElectricityTomorrowPriceLowest.Location = new System.Drawing.Point(528, 491);
             this.lblElectricityTomorrowPriceLowest.Name = "lblElectricityTomorrowPriceLowest";
             this.lblElectricityTomorrowPriceLowest.Size = new System.Drawing.Size(126, 36);
             this.lblElectricityTomorrowPriceLowest.TabIndex = 26;
             this.lblElectricityTomorrowPriceLowest.Text = "Lowest: ";
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.BackColor = System.Drawing.Color.Transparent;
+            this.btnSettings.FlatAppearance.BorderSize = 0;
+            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSettings.Image = global::_3D_Printing_Calculation.Properties.Resources.filter_57891;
+            this.btnSettings.Location = new System.Drawing.Point(1102, 29);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(102, 104);
+            this.btnSettings.TabIndex = 19;
+            this.btnSettings.UseVisualStyleBackColor = false;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
+            // btnExportExcel
+            // 
+            this.btnExportExcel.BackColor = System.Drawing.Color.Transparent;
+            this.btnExportExcel.FlatAppearance.BorderSize = 0;
+            this.btnExportExcel.FlatAppearance.MouseDownBackColor = System.Drawing.Color.MediumSeaGreen;
+            this.btnExportExcel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.SeaGreen;
+            this.btnExportExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExportExcel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExportExcel.Image = global::_3D_Printing_Calculation.Properties.Resources.excel_4954;
+            this.btnExportExcel.Location = new System.Drawing.Point(949, 779);
+            this.btnExportExcel.Name = "btnExportExcel";
+            this.btnExportExcel.Size = new System.Drawing.Size(125, 106);
+            this.btnExportExcel.TabIndex = 15;
+            this.btnExportExcel.UseVisualStyleBackColor = false;
+            this.btnExportExcel.Click += new System.EventHandler(this.btnExportExcel_Click);
+            // 
+            // btnCalculate
+            // 
+            this.btnCalculate.BackColor = System.Drawing.Color.Transparent;
+            this.btnCalculate.FlatAppearance.BorderSize = 0;
+            this.btnCalculate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Chartreuse;
+            this.btnCalculate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LimeGreen;
+            this.btnCalculate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCalculate.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCalculate.Image = global::_3D_Printing_Calculation.Properties.Resources.accounting_14773;
+            this.btnCalculate.Location = new System.Drawing.Point(1080, 779);
+            this.btnCalculate.Name = "btnCalculate";
+            this.btnCalculate.Size = new System.Drawing.Size(124, 106);
+            this.btnCalculate.TabIndex = 7;
+            this.btnCalculate.UseVisualStyleBackColor = false;
+            this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
             // 
             // Form1
             // 
@@ -357,7 +368,8 @@ namespace _3D_Printing_Calculation
             this.Controls.Add(this.MainLabel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = " ";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = " Minting Printing";
             ((System.ComponentModel.ISupportInitialize)(this.filamentPriceNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.filamentUsedNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.electricityPriceNumber)).EndInit();
