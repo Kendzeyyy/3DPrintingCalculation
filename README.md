@@ -7,6 +7,8 @@ In settings page you can change profit margin, work effort and project starting 
 Image of the app:
 ![image](https://github.com/Kendzeyyy/3DPrintingCalculation/assets/23027158/464eb822-7530-4fe9-aa74-848caaae3fd8)
 ![image](https://github.com/Kendzeyyy/3DPrintingCalculation/assets/23027158/fde57e9b-87e9-4057-9c09-30358508214c)
+![image](https://github.com/Kendzeyyy/3DPrintingCalculation/assets/23027158/1bcc1738-5f68-4845-86d6-5ea7f07cc1b5)
+
 
 ---
 
