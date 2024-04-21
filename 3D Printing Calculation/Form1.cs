@@ -11,7 +11,9 @@ using ClosedXML.Excel;
 using System.IO;
 using System.Net.Http;
 using Newtonsoft.Json;
+using static ApiResponseDTO;
 
+#region Power consumption description - Artillery Sidewinder X1
 /*
 3D printing calculation for Artillery Sidewinder X1 printer.
 
@@ -25,6 +27,7 @@ Total energy consumed = kWh x h
 3.5 kWh x 5h = 17.5 kWh
 17.5 kWh x pörssisähköhinta (e.g. 2,65 c/kWh) =  0,46€
 */
+#endregion
 
 namespace _3D_Printing_Calculation
 {
@@ -38,16 +41,33 @@ namespace _3D_Printing_Calculation
 
         private decimal price, filamentUsed, timeUsed;
         private double convertedPrice, totalSum, profitTotal, countWorkAndProfitMargin;
-        private const int decimalPlaces = 2, profitMargin = 30, workEffort = 10, startingPrice = 2, postProcessing = 2;
+        private const int decimalPlaces = 2, profitMargin = 30, workEffort = 20, startingPrice = 2, postProcessing = 2;
         private const string spotURL = "https://api.epossu.fi/v2/marketData";
 
         DateTime date = DateTime.Today;
+
+        // Get the current time
+        DateTime now = DateTime.Now;
+
+        #region Buttons
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            var newForm = new Settings();
+            newForm.Show();
+        }
+
+        private void btnCalculate_Click(object sender, EventArgs e)
+        {
+            Main();
+        }
 
         private void btnExportExcel_Click(object sender, EventArgs e)
         {
             ExportToExcel();
         }
+        #endregion
 
+        #region Excel setup
         private string ExportToExcel()
         {
             string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
@@ -61,13 +81,15 @@ namespace _3D_Printing_Calculation
                 worksheet.Cell("B1").Value = "Value";
 
                 int row = 2;
-                AddCellValue(worksheet, "Date", date, row++);
+                AddCellValue(worksheet, "Date", date.ToString("dd/MM/yyyy"), row++);
                 AddCellValue(worksheet, "Filament type", comboBoxFilamentType.Text, row++);
                 AddCellValue(worksheet, "Filament Price 1kg", price + "€", row++);
                 AddCellValue(worksheet, "Filament Used", filamentUsed + "g", row++);
-                AddCellValue(worksheet, "Electricity", electricityPriceNumber.Value + " c/kWh", row++);
+                AddCellValue(worksheet, "Electricity (SPOT average price)", electricityPriceNumber.Value + " c/kWh", row++);
                 AddCellValue(worksheet, "Printing Time", timeUsed + "h", row++);
-                AddCellValue(worksheet, "Work: Modeling, slicing & testing", startingPrice + "€", row++);
+                AddCellValue(worksheet, "Starting price", startingPrice + "€", row++);
+                AddCellValue(worksheet, "Margin", profitMargin + "%", row++);
+                AddCellValue(worksheet, "Work: Modeling, slicing & testing", workEffort + "%", row++);
                 AddCellValue(worksheet, "Post-processing: sanding & finishing", postProcessing + "€", row++);
                 AddCellValue(worksheet, "", "", row++);
                 AddCellValue(worksheet, "Total price", Math.Round(profitTotal, decimalPlaces) + "€", row++);
@@ -79,12 +101,24 @@ namespace _3D_Printing_Calculation
             return filePath;
         }
 
+        private void comboBoxFilamentType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblFilamentType_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void AddCellValue(IXLWorksheet worksheet, string fieldName, object value, int row)
         {
             worksheet.Cell(row, 1).Value = fieldName;
             worksheet.Cell(row, 2).Value = value?.ToString();
         }
+        #endregion
 
+        #region Electricity API
         private async Task getElectricityPeakAPI()
         {
             try
@@ -112,12 +146,35 @@ namespace _3D_Printing_Calculation
                         {
                             // Access the "options" values for today
                             double todayAverage = apiResponse.Data.Today.Options.Average;
+
+                            // Disable electricity price input field
                             electricityPriceNumber.ReadOnly = true;
                             electricityPriceNumber.Controls[0].Enabled = false;
                             electricityPriceNumber.Value = (decimal)todayAverage;
 
-                            // Access the "options" values for tomorrow
-                            double tomorrowAverage = apiResponse.Data.Tomorrow.Options.Average;
+                            ApiResponseDTO.PriceInfo currentPrice = apiResponse.Data.Today.Prices
+                                .OrderBy(p => Math.Abs((DateTime.ParseExact(p.Date, "dd.MM.yyyy HH:mm", null) - now).TotalMinutes))
+                                .FirstOrDefault();
+
+                            lblElectricityPriceNow.Text += currentPrice.Price;
+                            lblElectricityPriceLowest.Text += Math.Round(apiResponse.Data.Today.Options.Lowest.Price, decimalPlaces);
+                            lblElectricityPriceHighest.Text += Math.Round(apiResponse.Data.Today.Options.Highest.Price, decimalPlaces);
+
+                            // Check for tomorrows electricity prices before/after 15 pm
+                            if (apiResponse.Data.Tomorrow.Prices == null)
+                            {
+                                lblElectricityPriceTomorrow.Text = "Price available after 15:00 pm";
+                                lblElectricityTomorrowPriceLowest.Text = "Price available after 15:00 pm";
+                                lblElectricityTomorrowPriceHighest.Text = "Price available after 15:00 pm";
+                            }
+                            else
+                            {
+                                // Access the "options" values for tomorrow
+                                double tomorrowAverage = apiResponse.Data.Tomorrow.Options.Average;
+                                lblElectricityPriceTomorrow.Text += tomorrowAverage;
+                                lblElectricityTomorrowPriceLowest.Text += Math.Round(apiResponse.Data.Tomorrow.Options.Lowest.Price, decimalPlaces);
+                                lblElectricityTomorrowPriceHighest.Text += Math.Round(apiResponse.Data.Tomorrow.Options.Highest.Price, decimalPlaces);
+                            }
                         }
                     }
 
@@ -135,11 +192,19 @@ namespace _3D_Printing_Calculation
             }
 
         }
+        #endregion
 
-        private void btnCalculate_Click(object sender, EventArgs e)
+        #region Electricity consumption
+        private double electricityUsed()
         {
-            Main();
+            int power = 700;
+            double electricityPrice = (double)(electricityPriceNumber.Value / 100);
+            double sum = (double)(power * timeUsed);
+            double kWh = sum / 1000;
+            double totalEnergyConsumed = kWh * (double)timeUsed;
+            return totalEnergyConsumed * electricityPrice;
         }
+        #endregion
 
         private void Main()
         {
@@ -159,6 +224,7 @@ namespace _3D_Printing_Calculation
             printingTotalSum(roundedValue);
         }
 
+        #region Error messages
         private bool checkEmptyFields()
         {
             if (filamentPriceNumber.Value == filamentPriceNumber.Minimum)
@@ -169,6 +235,8 @@ namespace _3D_Printing_Calculation
                 ShowErrorMessage("Electricity price");
             else if (printingTimeNumber.Value == printingTimeNumber.Minimum)
                 ShowErrorMessage("Filament used time");
+            else if (comboBoxFilamentType.Text == String.Empty)
+                ShowErrorMessage("Filament type");
             else
                 return false;
 
@@ -179,34 +247,29 @@ namespace _3D_Printing_Calculation
         {
             MessageBox.Show($"{fieldName} field cannot be empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+        #endregion
 
+        #region Filament price
         private void calculatePrintingSum(decimal price)
         {
-            // Price (e.g. 30€ / 1000g = 0,03)
+            // Filament price (e.g. 30€ / 1000g = 0,03)
             convertedPrice = (double)(price / 1000);
         }
 
         private double calculateFilamentUsed()
         {
-            // calculated printing sum x filament used (e.g. 0,03 x 80g = 2.4€)
+            // Calculated printing sum x filament used (e.g. 0,03 x 80g = 2.4€)
             return convertedPrice * (double)filamentUsed;
         }
+        #endregion
 
-        private double electricityUsed()
-        {
-            int power = 700;
-            double electricityPrice = (double)(electricityPriceNumber.Value / 100);
-            double sum = (double)(power * timeUsed);
-            double kWh = sum / 1000;
-            double totalEnergyConsumed = kWh * (double)timeUsed;
-            return totalEnergyConsumed * electricityPrice;
-        }
-
+        #region Printing price calculation
         private void printingTotalSum(double roundedValue)
         {
             countWorkAndProfitMargin = roundedValue / 100 * (profitMargin + workEffort);
             profitTotal = roundedValue + countWorkAndProfitMargin + startingPrice + postProcessing;
             lblTotalCount.Text = $"Total price: {Math.Round(profitTotal, decimalPlaces)}€";
         }
+        #endregion
     }
 }
