@@ -140,16 +140,6 @@ namespace _3D_Printing_Calculation
             return filePath;
         }
 
-        private void comboBoxFilamentType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblFilamentType_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void AddCellValue(IXLWorksheet worksheet, string fieldName, object value, int row)
         {
             worksheet.Cell(row, 1).Value = fieldName;

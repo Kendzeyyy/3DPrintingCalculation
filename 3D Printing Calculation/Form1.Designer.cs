@@ -193,7 +193,6 @@ namespace _3D_Printing_Calculation
             this.lblFilamentType.Size = new System.Drawing.Size(128, 25);
             this.lblFilamentType.TabIndex = 16;
             this.lblFilamentType.Text = "Filament type";
-            this.lblFilamentType.Click += new System.EventHandler(this.lblFilamentType_Click);
             // 
             // comboBoxFilamentType
             // 
@@ -211,7 +210,6 @@ namespace _3D_Printing_Calculation
             this.comboBoxFilamentType.Size = new System.Drawing.Size(196, 28);
             this.comboBoxFilamentType.TabIndex = 17;
             this.comboBoxFilamentType.Text = "PLA";
-            this.comboBoxFilamentType.SelectedIndexChanged += new System.EventHandler(this.comboBoxFilamentType_SelectedIndexChanged);
             // 
             // lblElectricityPriceNow
             // 
