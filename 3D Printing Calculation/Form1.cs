@@ -35,22 +35,18 @@ namespace _3D_Printing_Calculation
         {
             InitializeComponent();
             GetElectricityPeakAPI();
-            
 
             formSettings = new Settings();
+            formSettings.DefaultSettingsValues();
         }
 
-        // Private
         private decimal price, filamentUsed, timeUsed;
         private double convertedPrice, totalSum, profitTotal, countWorkAndProfitMargin;
-        private int profitMargin = 30, workEffort = 20, startingPrice = 2, postProcessing = 2;
+        private int profitMargin, workEffort, startingPrice, postProcessing;
         private const int decimalPlaces = 2;
         private const string spotURL = "https://api.epossu.fi/v2/marketData";
 
-        // Date time
         DateTime date = DateTime.Today;
-
-        // Get the current time
         DateTime now = DateTime.Now;
 
         private void Main()
@@ -67,8 +63,9 @@ namespace _3D_Printing_Calculation
             CalculatePrintingSum(price);
             totalSum = CalculateFilamentUsed() + ElectricityUsed();
 
-            double roundedValue = Math.Round(totalSum, decimalPlaces);
             GetSettingsValues();
+
+            double roundedValue = Math.Round(totalSum, decimalPlaces);
             PrintingTotalSum(roundedValue);
         }
 
@@ -99,6 +96,8 @@ namespace _3D_Printing_Calculation
                 workEffort = (int)Properties.Settings.Default.WorkEffort;
                 startingPrice = (int)Properties.Settings.Default.StartingPrice;
                 postProcessing = (int)Properties.Settings.Default.PostProcessing;
+
+                Properties.Settings.Default.Save();
             } 
             catch (Exception ex)
             {
@@ -205,7 +204,7 @@ namespace _3D_Printing_Calculation
                             }
                             else
                             {
-                                // Access the "options" values for tomorrow
+                                // Access the values for tomorrow
                                 double tomorrowAverage = apiResponse.Data.Tomorrow.Options.Average;
                                 lblElectricityPriceTomorrow.Text += Math.Round(tomorrowAverage, decimalPlaces);
                                 lblElectricityTomorrowPriceLowest.Text += Math.Round(apiResponse.Data.Tomorrow.Options.Lowest.Price, decimalPlaces);
@@ -270,13 +269,11 @@ namespace _3D_Printing_Calculation
         #region Filament price
         private void CalculatePrintingSum(decimal price)
         {
-            // Filament price (e.g. 30€ / 1000g = 0,03)
             convertedPrice = (double)(price / 1000);
         }
 
         private double CalculateFilamentUsed()
         {
-            // Calculated printing sum x filament used (e.g. 0,03 x 80g = 2.4€)
             return convertedPrice * (double)filamentUsed;
         }
         #endregion

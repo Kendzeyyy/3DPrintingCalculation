@@ -106,11 +106,6 @@ namespace _3D_Printing_Calculation
             // upDownStartingPrice
             // 
             this.upDownStartingPrice.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.upDownStartingPrice.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
             this.upDownStartingPrice.Location = new System.Drawing.Point(37, 229);
             this.upDownStartingPrice.Name = "upDownStartingPrice";
             this.upDownStartingPrice.Size = new System.Drawing.Size(196, 35);
@@ -134,11 +129,6 @@ namespace _3D_Printing_Calculation
             // upDownPostProcessing
             // 
             this.upDownPostProcessing.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.upDownPostProcessing.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
             this.upDownPostProcessing.Location = new System.Drawing.Point(37, 326);
             this.upDownPostProcessing.Name = "upDownPostProcessing";
             this.upDownPostProcessing.Size = new System.Drawing.Size(196, 35);

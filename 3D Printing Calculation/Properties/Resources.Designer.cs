@@ -93,16 +93,6 @@ namespace _3D_Printing_Calculation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap filter_6551 {
-            get {
-                object obj = ResourceManager.GetObject("filter-6551", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap save_file_5341 {
             get {
                 object obj = ResourceManager.GetObject("save-file-5341", resourceCulture);
